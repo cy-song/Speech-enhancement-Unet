@@ -1,0 +1,50 @@
+#     12/2給training用的     第 3-2 段：SNR 版的加噪函式  改成「兩個噪音一起加進去」
+
+#def add_all_noises_with_snr(clean, noise_bank, CFG, mix_ratio=None):
+
+#     12/17給test用的
+def add_all_noises_fixed_snr(clean, noise_bank, snr_db, mix_ratio=None):
+    """
+    clean: 1D tensor [T]
+    noise_bank: dict{name: 1D tensor}
+    snr_db: 固定 SNR（dB）
+    """
+    import random
+    import torch
+    import numpy as np
+
+    noise_names = list(noise_bank.keys())
+    num_noises = len(noise_names)
+    T = clean.shape[0]
+
+    if mix_ratio is None:
+        mix_ratio = [1.0 / num_noises] * num_noises
+    else:
+        mix_ratio = np.array(mix_ratio, dtype=float)
+        mix_ratio = mix_ratio / mix_ratio.sum()
+
+    combined_noise = torch.zeros_like(clean)
+
+    for w, name in zip(mix_ratio, noise_names):
+        noise_full = noise_bank[name]
+
+        if noise_full.shape[0] < T:
+            repeat = T // noise_full.shape[0] + 1
+            noise_full = noise_full.repeat(repeat)
+
+        start = random.randint(0, noise_full.shape[0] - T)
+        combined_noise += float(w) * noise_full[start:start+T]
+
+    eps = 1e-8
+    rms_s = torch.sqrt(torch.mean(clean**2) + eps)
+    rms_n = torch.sqrt(torch.mean(combined_noise**2) + eps)
+
+    rms_n_target = rms_s / (10 ** (snr_db / 20))
+    scale = rms_n_target / (rms_n + eps)
+
+    noisy = clean + combined_noise * scale
+
+    if noisy.abs().max() > 1.0:
+        noisy = noisy / noisy.abs().max()
+
+    return noisy, noise_names, snr_db
