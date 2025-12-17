@@ -1,0 +1,38 @@
+#12/11  一次上傳多個噪音 → 自動建立 noise_bank
+
+from google.colab import files
+import torchaudio
+import torch
+
+sample_rate = 16000  # 修改成妳的 CFG["sample_rate"]
+
+def load_noise_file(path, sample_rate):
+    wav, sr = torchaudio.load(path)
+
+    # mono
+    if wav.shape[0] > 1:
+        wav = wav[:1, :]
+
+    # resample
+    if sr != sample_rate:
+        wav = torchaudio.transforms.Resample(sr, sample_rate)(wav)
+
+    # normalize
+    wav = wav / (wav.abs().max() + 1e-8)
+
+    return wav.squeeze(0)
+
+# -----------------------
+# 上傳多個噪音檔
+# -----------------------
+uploaded = files.upload()   # 可以同時選多個 *.wav *.m4a *.mp3
+
+noise_bank = {}
+
+for fname in uploaded.keys():
+    noise = load_noise_file(fname, sample_rate)
+    key = fname.rsplit(".",1)[0]   # 用檔名（不含副檔名）當 key
+    noise_bank[key] = noise
+    print(f"載入成功：{key}, 長度 = {noise.shape}")
+
+print("\n最終 noise_bank keys =", list(noise_bank.keys()))
