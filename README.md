@@ -34,7 +34,7 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 
 ## 📁 Repository Structure
 
-
+```
 ├── step1_load_librispeech.py # Load clean speech reference
 ├── step2_config.py # Configuration
 ├── step3_load_model.py # Load trained UNet model
@@ -44,7 +44,7 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 ├── step7_metrics.py # PESQ / STOI / NR
 ├── step8_main.py # Main evaluation script
 └── README.md
-
+```
 
 ---
 
