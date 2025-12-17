@@ -1,0 +1,45 @@
+#  12/2載入 model
+from google.colab import drive
+drive.mount('/content/drive')
+
+# 1) 定義運算裝置
+import torch
+import torch.nn.functional as Fnn
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+from torch import nn
+class UNetMask(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.enc1 = nn.Sequential(nn.Conv2d(1,16,3,padding=1), nn.ReLU(), nn.MaxPool2d((1,2)))
+        self.enc2 = nn.Sequential(nn.Conv2d(16,32,3,padding=1), nn.ReLU(), nn.MaxPool2d((1,2)))
+        self.enc3 = nn.Sequential(nn.Conv2d(32,64,3,padding=1), nn.ReLU(), nn.MaxPool2d((1,2)))
+        self.dec3 = nn.Sequential(nn.ConvTranspose2d(64,32,kernel_size=(1,2),stride=(1,2)), nn.ReLU())
+        self.dec2 = nn.Sequential(nn.ConvTranspose2d(32,16,kernel_size=(1,2),stride=(1,2)), nn.ReLU())
+        self.out  = nn.Sequential(nn.Conv2d(16,1,3,padding=1), nn.Sigmoid())
+
+    def forward(self, x):
+        B,_,Fdim,T = x.shape
+        x1 = self.enc1(x)    # T/2
+        x2 = self.enc2(x1)    # T/4
+        x3 = self.enc3(x2)    # T/8
+        d3 = self.dec3(x3)+ x2
+        d2 = self.dec2(d3)+ x1
+        x = self.out(d2)
+        x = Fnn.interpolate(x, size=(Fdim, T), mode='bilinear', align_corners=False)
+        return x
+
+
+#model = torch.load("/content/drive/MyDrive/NoiseR_data/1210/1210_unet_key_bird_dog_50epoch.pth", map_location='cpu')
+model = UNetMask().to(device)
+
+state_dict = torch.load(
+    "/content/drive/MyDrive/NoiseR_data/1210/1210_unet_key_bird_dog_50epoch.pth",
+    map_location=device
+)
+
+
+
+model.load_state_dict(state_dict)
+model.eval()
+print("模型載入成功")
+
