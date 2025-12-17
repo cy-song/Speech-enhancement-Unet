@@ -34,19 +34,17 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 
 ## 📁 Repository Structure
 
-.
+
 ├── step1_load_librispeech.py # Load clean speech reference
-├── step2_config.py # Configuration (STFT, SNR, etc.)
-├── step3_load_model.py # Load trained U-Net model
-├── step4_build_noise_bank.py # Load real recorded noises
-├── step5_add_noise_fixed_snr.py # Multi-noise mixing with fixed SNR
-├── step6_infer_once_fixed_snr.py # Inference pipeline (aligned with training)
-├── step7_metrics.py # PESQ / STOI / Noise Reduction
-├── step8_main.py # Main evaluation loop
+├── step2_config.py # Configuration
+├── step3_load_model.py # Load trained UNet model
+├── step4_build_noise_bank.py # Build noise bank
+├── step5_add_noise_fixed_snr.py # Fixed-SNR noise mixing
+├── step6_infer_once_fixed_snr.py # Inference pipeline
+├── step7_metrics.py # PESQ / STOI / NR
+├── step8_main.py # Main evaluation script
 └── README.md
 
-yaml
-複製程式碼
 
 ---
 
@@ -85,8 +83,7 @@ STOI: speech intelligibility
 
 Noise Reduction (NR):
 
-text
-複製程式碼
+
 NR(dB) = 10 * log10( noise_power_noisy / noise_power_enhanced )
 Subjective Evaluation
 Direct listening comparison is used to interpret cases where
