@@ -1,0 +1,19 @@
+!pip install pesq
+!pip install pystoi
+
+
+def compute_noise_reduction_db(clean, noisy, enhanced, eps=1e-8):
+    """
+    clean, noisy, enhanced: 1D numpy array, same length
+    回傳: noise_reduction_db (float)
+    """
+    noise_power_noisy = np.mean((noisy - clean) ** 2)
+    noise_power_enh   = np.mean((enhanced - clean) ** 2)
+
+    noise_reduction_db = 10 * np.log10(
+        (noise_power_noisy + eps) /
+        (noise_power_enh + eps)
+    )
+    return noise_reduction_db
+
+
