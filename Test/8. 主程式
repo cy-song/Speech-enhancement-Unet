@@ -1,0 +1,135 @@
+
+
+#12/11  主程式: 加自己上傳的噪音
+#snr_db = 0
+snr_list = [10, 5, 0, -5, -10]
+
+# ===== imports =====
+from pesq import pesq
+from pystoi import stoi
+from IPython.display import Audio, display
+
+# ===== utils =====
+def to_mono(wav):
+    """
+    wav: Tensor [C, T] 或 [1, T]
+    回傳: [1, T]
+    """
+    if wav.dim() == 1:
+        wav = wav.unsqueeze(0)
+
+    if wav.shape[0] > 1:
+        wav = wav[:1, :]   # 只取第一個聲道
+
+    return wav
+
+
+def to_1d(x):
+    if isinstance(x, torch.Tensor):
+        x = x.detach().cpu().numpy()
+    if x.ndim == 2:
+        x = x[0]
+    return x
+
+def align_length(*signals):
+    min_len = min(len(s) for s in signals)
+    return [s[:min_len] for s in signals]
+
+#Step 1：讀 test 語音
+clear_index = 5
+test_wav, test_sr, *_ = test_dataset[clear_index]
+test_wav = to_mono(test_wav)
+
+if test_sr != sample_rate:
+    test_wav = torchaudio.transforms.Resample(test_sr, sample_rate)(test_wav)
+
+
+
+clean_1d = to_1d(test_wav)
+
+
+#Step 2：讀妳自己的噪音 → 建立 noise_bank
+uploaded = files.upload()
+noise_bank = {}
+
+for fname in uploaded.keys():
+    noise = load_noise_file(fname, sample_rate)  # 我之前給妳的函式
+    key = fname.rsplit(".",1)[0]
+    noise_bank[key] = noise
+
+
+#Step 3：推論（用新的 infer_once，而不是 test_multi_noise_once_at_snr）
+#infer_once_fixed_snr(clean_wav, model, noise_bank, CFG, snr_db):
+# ===== Step 3: SNR loop =====
+for snr in snr_list:
+
+  noisy_wav, enhanced_wav, used_noises, used_snr = infer_once_fixed_snr(
+    clean_wav=test_wav,
+    model=model,
+    noise_bank=noise_bank,
+    CFG=CFG,
+    snr_db=snr
+  )
+  print("使用噪音：", used_noises)
+  print("實際 SNR：", used_snr)
+  noisy_1d    = to_1d(noisy_wav)
+  enhanced_1d = to_1d(enhanced_wav)
+
+  clean_1d, noisy_1d, enhanced_1d = align_length(
+        clean_1d, noisy_1d, enhanced_1d
+    )
+
+
+
+
+
+
+
+  #Step 4：聽聲音
+  print("Clean")
+  display(Audio(test_wav.numpy()[0], rate=sample_rate))
+  print("Noisy")
+  display(Audio(noisy_wav.numpy(), rate=sample_rate))
+  print("Enhanced")
+  display(Audio(enhanced_wav.numpy(), rate=sample_rate))
+
+  #Step 5：算 PESQ
+
+
+
+  p_noisy = pesq(sample_rate, clean_1d, noisy_1d, 'wb')
+  p_enh   = pesq(sample_rate, clean_1d, enhanced_1d, 'wb')
+
+  s_noisy = stoi(clean_1d, noisy_1d, sample_rate, extended=False)
+  s_enh   = stoi(clean_1d, enhanced_1d, sample_rate, extended=False)
+
+  # ---- Noise Reduction (dB) ----
+  nr_db = compute_noise_reduction_db(
+        clean_1d, noisy_1d, enhanced_1d
+    )
+
+  print(
+        f"SNR={snr:>3} | "
+        f"PESQ {p_noisy:.2f} → {p_enh:.2f} (Δ {p_enh-p_noisy:+.2f}) | "
+        f"STOI {s_noisy:.2f} → {s_enh:.2f} (Δ {s_enh-s_noisy:+.2f}) | "
+        f"NR {nr_db:+.2f} dB"
+    )
+
+
+
+#print("Noisy PESQ =", p_noisy)
+#print("Enhanced PESQ =", p_enh)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
