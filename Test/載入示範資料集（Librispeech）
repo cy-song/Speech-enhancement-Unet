@@ -1,0 +1,45 @@
+#第一段 載入示範資料集（Librispeech）
+
+# 1. 安裝必要的套件
+!pip install torchaudio librosa matplotlib
+!pip install torchcodec
+# 2. 引入必要的庫
+import torch
+#import torch.nn as nn
+#import torch.optim as optim
+import librosa
+import numpy as np
+import matplotlib.pyplot as plt
+import torchaudio
+from torch.utils.data import DataLoader, Dataset
+import os
+# 建立資料夾
+os.makedirs('./data', exist_ok=True)
+
+# 3. 下載並載入示範資料集（Librispeech）
+
+train_dataset = torchaudio.datasets.LIBRISPEECH(
+    root='./data', url='train-clean-100', download=True)
+print(f"資料集大小: {len(train_dataset)} 筆")
+
+# 4. 從資料集中取出一筆語音
+train_waveform, train_sr, *_ = train_dataset[0]
+#print(f"音訊形狀: {waveform.shape}, 取樣率: {sample_rate}")
+print(f"train waveform: {train_waveform.shape}, sr: {train_sr}")
+
+
+#聽聲音
+from IPython.display import Audio
+Audio(train_waveform.numpy()[0], rate=train_sr)
+# 6. 下載並載入測試集
+test_dataset = torchaudio.datasets.LIBRISPEECH('./data', url='test-clean', download=True)
+
+# 7. 取一筆測試音訊播放
+test_waveform, test_sr, *_ = test_dataset[0]
+print(f"test waveform: {test_waveform.shape}, sr: {test_sr}")
+Audio(test_waveform.numpy()[0], rate=test_sr)
+
+
+# 之後如果要用「測試語音」加噪，就統一用：
+waveform = test_waveform
+sample_rate = test_sr
