@@ -53,7 +53,7 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 ### 1️⃣ Install dependencies
 ```bash
 pip install torch torchaudio librosa pesq pystoi matplotlib
-2️⃣ Prepare inputs
+### 2️⃣ Prepare inputs
 Clean speech:
 
 LibriSpeech (auto download), or
@@ -64,7 +64,7 @@ Noise:
 
 Upload one or multiple real recorded noise files (.wav, .mp3, .m4a)
 
-3️⃣ Run main program
+### 3️⃣ Run main program
 Execute step8_main.py (or the corresponding notebook).
 
 The program will:
@@ -75,8 +75,8 @@ Output PESQ / STOI / Noise Reduction
 
 Play Clean / Noisy / Enhanced audio for listening
 
-📊 Evaluation Metrics
-Objective Metrics
+## 📊 Evaluation Metrics
+### Objective Metrics
 PESQ (WB): perceptual speech quality
 
 STOI: speech intelligibility
@@ -90,7 +90,7 @@ Direct listening comparison is used to interpret cases where
 objective metrics and perceptual quality diverge.
 
 🔍 Problem Analysis & Lessons Learned (Key Takeaways)
-1️⃣ SNR Control Is Critical (Train vs Test Mismatch)
+## 1️⃣ SNR Control Is Critical (Train vs Test Mismatch)
 Problem
 Training uses random SNR sampling (CFG["SNR_LIST"]) for data augmentation.
 
@@ -111,7 +111,7 @@ Explicitly specify SNR: 10, 5, 0, -5, -10 dB.
 
 ✅ Ensures reproducible and comparable evaluation across SNRs.
 
-2️⃣ Train / Test Pipeline Must Be Strictly Aligned
+##2️⃣ Train / Test Pipeline Must Be Strictly Aligned
 Problem
 Early inference used a legacy noise injection method (noise_wave).
 
@@ -132,7 +132,7 @@ Removed all legacy test functions (e.g. test_multi_noise_once_*).
 
 ✅ Eliminates unintended distribution mismatch between training and testing.
 
-3️⃣ Objective Metrics May Decrease While Perceptual Quality Improves
+##3️⃣ Objective Metrics May Decrease While Perceptual Quality Improves
 Observation
 In some low-SNR cases:
 
@@ -160,7 +160,7 @@ Listening-based diagnosis
 
 ✅ Metrics must be interpreted, not blindly optimized.
 
-4️⃣ Real-World Noises Are Essential for Practical Validation
+##4️⃣ Real-World Noises Are Essential for Practical Validation
 Finding
 Models performing well on synthetic noises may fail on:
 
