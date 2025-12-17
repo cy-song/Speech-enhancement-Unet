@@ -1,0 +1,57 @@
+def infer_once_fixed_snr(clean_wav, model, noise_bank, CFG, snr_db):
+
+
+
+# === 1. 固定 SNR 加噪（test only）===
+    noisy, noise_names, used_snr = add_all_noises_fixed_snr(
+        clean_wav.squeeze(0),
+        noise_bank,
+        snr_db
+    )
+    noisy = noisy.unsqueeze(0)
+
+
+# === 2. 後處理（與原 infer_once 完全一致）===
+    # === 以下完全等同 12/11 infer_once ===
+    rms = torch.sqrt((noisy ** 2).mean() + 1e-8)
+    noisy_norm = noisy / (rms + 1e-8)
+
+    n_fft = CFG["N_FFT"]
+    hop = CFG["HOP"]
+    win = torch.hann_window(n_fft).to(clean_wav.device)
+
+    S = torch.stft(
+        noisy_norm.squeeze(0),
+        n_fft=n_fft,
+        hop_length=hop,
+        win_length=n_fft,
+        window=win,
+        center=True,
+        return_complex=True
+    )
+
+    noisy_mag = S.abs()
+    phase = S.angle()
+
+    T = noisy_mag.shape[1]
+    T8 = T - (T % 8)
+    noisy_mag = noisy_mag[:, :T8]
+    phase = phase[:, :T8]
+
+    with torch.no_grad():
+        mag_in = noisy_mag.unsqueeze(0).unsqueeze(0)
+        mask = model(mag_in)[0, 0]
+
+    est_mag = (mask * noisy_mag).clamp_min(0.0)
+    est_complex = est_mag * torch.exp(1j * phase)
+
+    enhanced = torch.istft(
+        est_complex,
+        n_fft=n_fft,
+        hop_length=hop,
+        win_length=n_fft,
+        window=win,
+        center=True
+    )
+
+    return noisy.squeeze(0).cpu(), enhanced.cpu(), noise_names, used_snr
