@@ -53,155 +53,166 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 ### 1️⃣ Install dependencies
 ```bash
 pip install torch torchaudio librosa pesq pystoi matplotlib
+```
 ### 2️⃣ Prepare inputs
 Clean speech:
 
-LibriSpeech (auto download), or
-
-Upload your own clean speech file
+- LibriSpeech (auto download), or  
+- Upload your own clean speech file
 
 Noise:
 
-Upload one or multiple real recorded noise files (.wav, .mp3, .m4a)
+- Upload one or multiple real recorded noise files  
+  (.wav, .mp3, .m4a)
 
 ### 3️⃣ Run main program
-Execute step8_main.py (or the corresponding notebook).
+
+Execute `step8_main.py` (or the corresponding notebook).
 
 The program will:
 
-Loop over SNR = [10, 5, 0, -5, -10]
+- Loop over SNR = `[10, 5, 0, -5, -10]`
+- Output PESQ / STOI / Noise Reduction
+- Play Clean / Noisy / Enhanced audio for listening
 
-Output PESQ / STOI / Noise Reduction
-
-Play Clean / Noisy / Enhanced audio for listening
+---
 
 ## 📊 Evaluation Metrics
-### Objective Metrics
-PESQ (WB): perceptual speech quality
 
-STOI: speech intelligibility
+### Objective Metrics
+
+- PESQ (WB): perceptual speech quality  
+- STOI: speech intelligibility  
 
 Noise Reduction (NR):
 
-
+```
 NR(dB) = 10 * log10( noise_power_noisy / noise_power_enhanced )
-Subjective Evaluation
-Direct listening comparison is used to interpret cases where
+```
+
+### Subjective Evaluation
+
+Direct listening comparison is used to interpret cases where  
 objective metrics and perceptual quality diverge.
 
-🔍 Problem Analysis & Lessons Learned (Key Takeaways)
-## 1️⃣ SNR Control Is Critical (Train vs Test Mismatch)
-Problem
-Training uses random SNR sampling (CFG["SNR_LIST"]) for data augmentation.
+---
 
-Early testing reused the same random SNR logic.
+## 🔍 Problem Analysis & Lessons Learned (Key Takeaways)
 
-This caused high variance and unstable PESQ / STOI, making results non-comparable.
+### 1️⃣ SNR Control Is Critical (Train vs Test Mismatch)
 
-Solution
-Clearly separate responsibilities:
+**Problem**
 
-Training: random SNR (robustness)
+- Training uses random SNR sampling (`CFG["SNR_LIST"]`) for data augmentation  
+- Early testing reused the same random SNR logic  
+- This caused high variance and unstable PESQ / STOI, making results non-comparable  
 
-Testing: fixed SNR (evaluation stability)
+**Solution**
 
-Introduced infer_once_fixed_snr() for testing.
-
-Explicitly specify SNR: 10, 5, 0, -5, -10 dB.
+- Clearly separate responsibilities:
+  - **Training**: random SNR (robustness)
+  - **Testing**: fixed SNR (evaluation stability)
+- Introduced `infer_once_fixed_snr()` for testing
+- Explicitly specify SNR levels:
+  - `10, 5, 0, -5, -10 dB`
 
 ✅ Ensures reproducible and comparable evaluation across SNRs.
 
-##2️⃣ Train / Test Pipeline Must Be Strictly Aligned
-Problem
-Early inference used a legacy noise injection method (noise_wave).
+---
 
-Training data was generated using add_all_noises_with_snr().
+### 2️⃣ Train / Test Pipeline Must Be Strictly Aligned
 
-Result: hidden domain shift — the model was evaluated on unseen data distribution.
+**Problem**
 
-Solution
-Fully aligned inference pipeline with training:
+- Early inference used a legacy noise injection method (`noise_wave`)
+- Training data was generated using `add_all_noises_with_snr()`
+- Result: hidden domain shift — the model was evaluated on an unseen data distribution
 
-Multi-noise mixing
+**Solution**
 
-RMS normalization
-
-STFT → U-Net mask → ISTFT
-
-Removed all legacy test functions (e.g. test_multi_noise_once_*).
+- Fully aligned inference pipeline with training:
+  - Multi-noise mixing
+  - RMS normalization
+  - STFT → U-Net mask → ISTFT
+- Removed all legacy test functions  
+  (e.g. `test_multi_noise_once_*`)
 
 ✅ Eliminates unintended distribution mismatch between training and testing.
 
-##3️⃣ Objective Metrics May Decrease While Perceptual Quality Improves
-Observation
+---
+
+### 3️⃣ Objective Metrics May Decrease While Perceptual Quality Improves
+
+**Observation**
+
 In some low-SNR cases:
 
-PESQ / STOI decreased
+- PESQ / STOI decreased
+- Subjective noise suppression clearly improved
 
-Subjective noise suppression clearly improved
+**Analysis**
 
-Analysis
 Strong noise suppression can introduce:
 
-Speech distortion
-
-Over-suppression of low-energy speech components
+- Speech distortion
+- Over-suppression of low-energy speech components
 
 PESQ / STOI penalize distortion more than residual noise.
 
-Mitigation
-Added Noise Reduction (NR) metric to explicitly quantify noise suppression.
+**Mitigation**
 
-Combined:
-
-Objective metrics
-
-Listening-based diagnosis
+- Added **Noise Reduction (NR)** metric to explicitly quantify noise suppression
+- Combined:
+  - Objective metrics
+  - Listening-based diagnosis
 
 ✅ Metrics must be interpreted, not blindly optimized.
 
-##4️⃣ Real-World Noises Are Essential for Practical Validation
-Finding
+---
+
+### 4️⃣ Real-World Noises Are Essential for Practical Validation
+
+**Finding**
+
 Models performing well on synthetic noises may fail on:
 
-Keyboard noise
+- Keyboard noise
+- Environmental recordings
+- Device-specific artifacts
 
-Environmental recordings
+**Approach**
 
-Device-specific artifacts
-
-Approach
-Built noise_bank from user-recorded real noises.
-
-Mixed multiple noises to simulate realistic environments.
+- Built `noise_bank` from user-recorded real noises
+- Mixed multiple noises to simulate realistic environments
 
 ✅ Improves confidence in real-world deployment scenarios.
 
-🎯 Key Takeaways
-Speech enhancement performance is pipeline-sensitive, not just model-dependent.
+---
 
-Evaluation stability requires explicit control of SNR.
+## 🎯 Key Takeaways
 
-Train/test alignment is mandatory to avoid silent failure.
+- Speech enhancement performance is **pipeline-sensitive**, not just model-dependent
+- Evaluation stability requires explicit control of SNR
+- Train/test alignment is mandatory to avoid silent failure
+- Objective metrics and listening tests must be used together
+- Engineering discipline matters as much as model architecture
 
-Objective metrics and listening tests must be used together.
+---
 
-Engineering discipline matters as much as model architecture.
+## 📌 Notes
 
-📌 Notes
-This repository focuses on inference and evaluation using a pre-trained model.
+- This repository focuses on **inference and evaluation** using a pre-trained model
+- Model training is intentionally separated
+- The code is designed for **clarity and reproducibility**, not production deployment
 
-Model training is intentionally separated.
+---
 
-The code is designed for clarity and reproducibility rather than production deployment.
+## 👤 Author Intent
 
-👤 Author Intent
 This project demonstrates my approach to Audio AI engineering:
 
-Start from real-world audio problems
+- Start from real-world audio problems
+- Diagnose failures using both metrics and listening
+- Iterate with controlled experiments
+- Prioritize correctness and interpretability over novelty
 
-Diagnose failures using both metrics and listening
-
-Iterate with controlled experiments
-
-Prioritize correctness and interpretability over novelty
