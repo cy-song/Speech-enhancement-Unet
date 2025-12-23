@@ -15,7 +15,7 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 
 ---
 
-## 🔧 Pipeline Overview
+##  Pipeline Overview
 
 **Inference & Evaluation Flow**
 
@@ -32,7 +32,7 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```
 ├── step1_load_librispeech.py # Load clean speech reference
@@ -48,13 +48,13 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 
 ---
 
-## ▶ How to Run (Colab-friendly)
+##  How to Run (Colab-friendly)
 
-### 1️⃣ Install dependencies
+### 1️. Install dependencies
 ```bash
 pip install torch torchaudio librosa pesq pystoi matplotlib
 ```
-### 2️⃣ Prepare inputs
+### 2️. Prepare inputs
 Clean speech:
 
 - LibriSpeech (auto download), or  
@@ -65,7 +65,7 @@ Noise:
 - Upload one or multiple real recorded noise files  
   (.wav, .mp3, .m4a)
 
-### 3️⃣ Run main program
+### 3️. Run main program
 
 Execute `step8_main.py` (or the corresponding notebook).
 
