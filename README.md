@@ -39,8 +39,8 @@ This project is designed for **Audio AI / ML Engineer** roles and emphasizes **r
 ├── step2_config.py # Configuration
 ├── step3_load_model.py # Load trained UNet model
 ├── step4_build_noise_bank.py # Build noise bank
-├── step5_add_noise_fixed_snr.py # Fixed-SNR noise mixing
-├── step6_infer_once_fixed_snr.py # Inference pipeline
+├── step5_build_noisy_dataset_fixed_snr.py #@ fixed SNR (test condition)
+├── step6_infer_eval_on_fixed_snr.py # NOTE: fixed SNR is defined in the noise mixing stage; this script runs inference/eval under that condition.
 ├── step7_metrics.py # PESQ / STOI / NR
 ├── step8_main.py # Main evaluation script
 └── README.md
