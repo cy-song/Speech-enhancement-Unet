@@ -30,7 +30,7 @@ Scoring (listening): 0=none, 1=mild, 2=moderate, 3=severe
 | LS-01 | in  | multi  | dog(3), NRtest_key | 10 |  |  |  |  |  |  |  |  |
 | LS-01 | out | single | fan | 10 |  |  |  |  |  |  |  |  |
 | LS-01 | out | multi  | fan, cafe | 10 |  |  |  |  |  |  |  |  |
-| ME-01 | in  | single | dog(3) | 10 |  |  |  |  |  |  |  |  |
+| ME-01 | in  | single | dog | 10 |-0.02  |-0.01  |0.86  |0.3  |2  |0.5  |At SNR = 10, the enhanced signal largely preserves speech intelligibility with minimal phoneme loss, but exhibits increased residual reverberation-like artifacts.  | Likely due to conservative suppression at high SNR, leaving low-energy noise unreduced. |
 | ME-01 | out | multi  | fan, cafe | 10 |  |  |  |  |  |  |  |  |
 
 
