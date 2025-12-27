@@ -69,5 +69,23 @@ Scoring (listening): 0=none, 1=mild, 2=moderate, 3=severe
 | ME-01 | out | multi  | fan, cafe | -5  |  |  |  |  |  |  |  |  |
 | ME-01 | out | multi  | fan, cafe | -10 |  |  |  |  |  |  |  |  |
 
+## Evaluation Order (How to Fill the Table)
+
+Each **row block** is defined by a fixed tuple:
+**(CleanID, Domain, NoiseSetting, NoiseKeys)**.
+For each fixed tuple, run a single inference sweep over:
+**SNR = [10, 5, 0, -5, -10]**, then fill the 5 rows.
+
+Fill order:
+1. Fix **CleanID = LS-01**.
+2. Fill **in-domain** first:
+   - single (NoiseKeys fixed) → sweep SNR 10/5/0/-5/-10 → fill 5 rows
+   - multi  (NoiseKeys fixed) → sweep SNR 10/5/0/-5/-10 → fill 5 rows
+3. Then fill **out-domain**:
+   - single → sweep SNR → fill 5 rows
+   - multi  → sweep SNR → fill 5 rows
+4. Only after LS-01 is complete, switch to **CleanID = ME-01** and repeat the same order.
+
+Rule: only change **one axis at a time** (NoiseSetting or Domain or CleanID), keep the others fixed.
 
 
