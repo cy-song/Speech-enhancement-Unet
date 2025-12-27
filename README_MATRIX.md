@@ -38,7 +38,7 @@ Scoring (listening): 0=none, 1=mild, 2=moderate, 3=severe
 
 | CleanID | Domain | NoiseSetting | NoiseKeys | SNR(dB) | PESQ (N→E, Δ) | STOI (N→E, Δ) | NR(dB) | DropWords(0-3) | Residual(0-3) | Distortion(0-3) | Failure note (1 sentence) | Hypothesis (1 sentence) |
 |---|---|---|---|---:|---|---|---:|---:|---:|---:|---|---|
-| LS-01 | in  | single | dog | 10  |  |  |  |  |  |  |  |  |
+| LS-01 | in  | single | dog | 10  | -0.82 |-0.15  |-3.15  |1  |2  | 2 | SNR = 10 dB, the model reduces overall noise energy but introduces waveform-level distortions, resulting in increased error relative to the clean signal despite perceptually lower background noise.  | The error-based NR degradation is likely caused by over-modification of speech spectral components, where aggressive masking alters low-energy speech details more than it removes residual noise. |
 | LS-01 | in  | single | dog | 5   |  |  |  |  |  |  |  |  |
 | LS-01 | in  | single | dog | 0   |  |  |  |  |  |  |  |  |
 | LS-01 | in  | single | dog | -5  |  |  |  |  |  |  |  |  |
