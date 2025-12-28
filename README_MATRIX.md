@@ -38,11 +38,11 @@ Scoring (listening): 0=none, 1=mild, 2=moderate, 3=severe
 
 | CleanID | Domain | NoiseSetting | NoiseKeys | SNR(dB) | PESQ (N→E, Δ) | STOI (N→E, Δ) | NR(dB) | DropWords(0-3) | Residual(0-3) | Distortion(0-3) | Failure note (1 sentence) | Hypothesis (1 sentence) |
 |---|---|---|---|---:|---|---|---:|---:|---:|---:|---|---|
-| LS-01 | in  | single | dog | 10  | -0.82 |-0.15  |-3.15  |1  |2  | 2 | SNR = 10 dB, the model reduces overall noise energy but introduces waveform-level distortions, resulting in increased error relative to the clean signal despite perceptually lower background noise.  | The error-based NR degradation is likely caused by over-modification of speech spectral components, where aggressive masking alters low-energy speech details more than it removes residual noise. |
-| LS-01 | in  | single | dog | 5   |  |  |  |  |  |  |  |  |
-| LS-01 | in  | single | dog | 0   |  |  |  |  |  |  |  |  |
-| LS-01 | in  | single | dog | -5  |  |  |  |  |  |  |  |  |
-| LS-01 | in  | single | dog | -10 |  |  |  |  |  |  |  |  |
+| LS-01 | in  | single | dog | 10  | -0.82 |-0.15  |-3.15  |1  |2  | 2 |Noise energy reduced but error increases  | Error-based metric sensitive to subtle speech modifications|
+| LS-01 | in  | single | dog | 5   | -0.6 | 0.77 |0.57  |0  |3  |1(掩蓋了一點)  | Narrow-band reverse-beep dominates noise segment  |  Mask-based UNet preserves stable tonal components overlapping speech |
+| LS-01 | in  | single | dog | 0   | -0.59 |-0.14  |5.59  | 3 | 2 | 2 | Word drop with residual high-frequency noise |  Mask suppresses speech-dominant bands while leaving high-frequency residuals |
+| LS-01 | in  | single | dog | -5  | -0.09 | -0.06 | +9.80 dB | 1 |3  |2  | Speech attenuation + strong residual noise |Over-suppression lowers speech; nonstationary noise not removed  |
+| LS-01 | in  | single | dog | -10 | -0.04  | -0.07 | +11.31 dB | 3 |3  | 1 | Severe word drop with strong residual noise |Over-suppression removes speech while nonstationary noise remains at very low SNR  |
 | LS-01 | in  | multi  | dog, nrtest_key | 10  |  |  |  |  |  |  |  |  |
 | LS-01 | in  | multi  | dog, nrtest_key | 5   |  |  |  |  |  |  |  |  |
 | LS-01 | in  | multi  | dog, nrtest_key | 0   |  |  |  |  |  |  |  |  |
