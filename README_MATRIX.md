@@ -48,26 +48,26 @@ Scoring (listening): 0=none, 1=mild, 2=moderate, 3=severe
 | LS-01 | in  | multi  | dog, nrtest_key | 0   | -0.02 | -0.06 | +5.06 dB | 2 |2（仍有殘噪，但狗叫與鍵盤聲明顯變小）  |2（其中一字屬音量衰減型掉字）  |Dog bark reduced but two words drop with residual hiss.  | Mask removes structured transient sounds while leaving unstructured broadband residuals and over-suppressing speech at low SNR |
 | LS-01 | in  | multi  | dog, nrtest_key | -5  | -0.05 | -0.11 | +8.98 dB | 0 |3 （狗叫高頻殘留明顯） |2（兩個字音節明顯被壓小）　 | No word drops, but two syllables attenuated with strong high-frequency dog-bark residuals. |Mask weakens low-energy speech while failing to suppress high-frequency components at very low SNR.  |
 | LS-01 | in  | multi  | dog, nrtest_key | -10 | -0.02 | +0.05 | +12.80 dB |0  | 3（殘餘高頻噪音明顯） | 3（4 個音節近乎聽不清、屬強烈衰減） |No word drops, but four syllables become nearly inaudible with strong high-frequency residual noise.  | Severe over-suppression collapses weak speech regions while leaving high-frequency residuals at extreme low SNR. |
-| LS-01 | out | single | fan | 10  |  |  |  |  |  |  |  |  |
-| LS-01 | out | single | fan | 5   |  |  |  |  |  |  |  |  |
-| LS-01 | out | single | fan | 0   |  |  |  |  |  |  |  |  |
-| LS-01 | out | single | fan | -5  |  |  |  |  |  |  |  |  |
-| LS-01 | out | single | fan | -10 |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | fan, cafe | 10  |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | fan, cafe | 5   |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | fan, cafe | 0   |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | fan, cafe | -5  |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | fan, cafe | -10 |  |  |  |  |  |  |  |  |
+| LS-01 | out | single | game | 10  |  |  |  |  |  |  |  |  |
+| LS-01 | out | single | game | 5   |  |  |  |  |  |  |  |  |
+| LS-01 | out | single | game | 0   |  |  |  |  |  |  |  |  |
+| LS-01 | out | single | game | -5  |  |  |  |  |  |  |  |  |
+| LS-01 | out | single | game | -10 |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | game, cafe | 10  |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | game, cafe | 5   |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | game, cafe | 0   |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | game, cafe | -5  |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | game, cafe | -10 |  |  |  |  |  |  |  |  |
 | ME-01 | in  | single | dog | 10  |  |  |  |  |  |  |  |  |
 | ME-01 | in  | single | dog | 5   |  |  |  |  |  |  |  |  |
 | ME-01 | in  | single | dog | 0   |  |  |  |  |  |  |  |  |
 | ME-01 | in  | single | dog | -5  |  |  |  |  |  |  |  |  |
 | ME-01 | in  | single | dog | -10 |  |  |  |  |  |  |  |  |
-| ME-01 | out | multi  | fan, cafe | 10  |  |  |  |  |  |  |  |  |
-| ME-01 | out | multi  | fan, cafe | 5   |  |  |  |  |  |  |  |  |
-| ME-01 | out | multi  | fan, cafe | 0   |  |  |  |  |  |  |  |  |
-| ME-01 | out | multi  | fan, cafe | -5  |  |  |  |  |  |  |  |  |
-| ME-01 | out | multi  | fan, cafe | -10 |  |  |  |  |  |  |  |  |
+| ME-01 | out | multi  | game, cafe | 10  |  |  |  |  |  |  |  |  |
+| ME-01 | out | multi  | game, cafe | 5   |  |  |  |  |  |  |  |  |
+| ME-01 | out | multi  | game, cafe | 0   |  |  |  |  |  |  |  |  |
+| ME-01 | out | multi  | game, cafe | -5  |  |  |  |  |  |  |  |  |
+| ME-01 | out | multi  | game, cafe | -10 |  |  |  |  |  |  |  |  |
 
 ## Evaluation Order (How to Fill the Table)
 
