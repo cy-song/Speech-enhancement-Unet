@@ -48,16 +48,16 @@ Scoring (listening): 0=none, 1=mild, 2=moderate, 3=severe
 | LS-01 | in  | multi  | dog, nrtest_key | 0   | -0.02 | -0.06 | +5.06 dB | 2 |2（仍有殘噪，但狗叫與鍵盤聲明顯變小）  |2（其中一字屬音量衰減型掉字）  |Dog bark reduced but two words drop with residual hiss.  | Mask removes structured transient sounds while leaving unstructured broadband residuals and over-suppressing speech at low SNR |
 | LS-01 | in  | multi  | dog, nrtest_key | -5  | -0.05 | -0.11 | +8.98 dB | 0 |3 （狗叫高頻殘留明顯） |2（兩個字音節明顯被壓小）　 | No word drops, but two syllables attenuated with strong high-frequency dog-bark residuals. |Mask weakens low-energy speech while failing to suppress high-frequency components at very low SNR.  |
 | LS-01 | in  | multi  | dog, nrtest_key | -10 | -0.02 | +0.05 | +12.80 dB |0  | 3（殘餘高頻噪音明顯） | 3（4 個音節近乎聽不清、屬強烈衰減） |No word drops, but four syllables become nearly inaudible with strong high-frequency residual noise.  | Severe over-suppression collapses weak speech regions while leaving high-frequency residuals at extreme low SNR. |
-| LS-01 | out | single | game | 10  |  |  |  |  |  |  |  |  |
-| LS-01 | out | single | game | 5   |  |  |  |  |  |  |  |  |
-| LS-01 | out | single | game | 0   |  |  |  |  |  |  |  |  |
-| LS-01 | out | single | game | -5  |  |  |  |  |  |  |  |  |
-| LS-01 | out | single | game | -10 |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | game, cafe | 10  |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | game, cafe | 5   |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | game, cafe | 0   |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | game, cafe | -5  |  |  |  |  |  |  |  |  |
-| LS-01 | out | multi  | game, cafe | -10 |  |  |  |  |  |  |  |  |
+| LS-01 | out | single | car | 10  | -0.26 | -0.2 |-4.6dB  |0 (音節稍不自然) |2(仍有空間感底噪)  |2  |No word drops, but mild syllable distortion appears with diffuse broadband residual noise after traffic suppression. | Structured traffic noise is suppressed, while diffuse background and speech harmonic smearing remain. |
+| LS-01 | out | single | car | 5   |-0.09  |-0.22  |-1.19 dB  | 0 | 2 | 2| No word drops, but many syllables are attenuated with similar diffuse broadband residuals (roomy noise) as at 10 dB. | Out-of-domain traffic causes over-suppression of weak speech regions while diffuse background components remain, driving a large STOI drop despite modest NR. |
+| LS-01 | out | single | car | 0   | -0.03 | -0.22 | +2.22 dB | 3 |3 | 2 |Multiple word drops with strong diffuse residual noise, requiring listening effort to follow the content.  | At 0 dB out-of-domain traffic, the mask over-suppresses weak speech regions while failing to remove diffuse background noise, leading to word loss and intelligibility collapse. |
+| LS-01 | out | single | car | -5  | +0.01 |-0.18  |+6.02 dB  | 3 |3  | 2 | Severe word drops with strong diffuse residual noise; speech becomes largely unintelligible at -5 dB. | Aggressive masking reduces noise energy (raising NR) but collapses weak speech regions and leaves diffuse background residuals, so objective scores can stay moderate while intelligibility fails. |
+| LS-01 | out | single | car | -10 | +0.01 | -0.14 | +9.35 dB | 3 | 3 | 3| Severe speech collapse (especially in the second half) with strong diffuse residual noise at -10 dB. | At extreme out-of-domain SNR, the mask over-suppresses most speech energy while leaving broadband/diffuse residuals, yielding high NR but near-zero perceptual intelligibility. |
+| LS-01 | out | multi  | car, cafe | 10  |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | car, cafe | 5   |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | car, cafe | 0   |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | car, cafe | -5  |  |  |  |  |  |  |  |  |
+| LS-01 | out | multi  | car, cafe | -10 |  |  |  |  |  |  |  |  |
 | ME-01 | in  | single | dog | 10  |  |  |  |  |  |  |  |  |
 | ME-01 | in  | single | dog | 5   |  |  |  |  |  |  |  |  |
 | ME-01 | in  | single | dog | 0   |  |  |  |  |  |  |  |  |
