@@ -11,7 +11,7 @@ The focus of this project is **not model novelty**, but **engineering correctnes
 - Objective metrics (PESQ / STOI) **and** Noise Reduction analysis
 - Diagnosis of metric–perceptual mismatch
 
-This project is designed for **Audio AI / ML Engineer** roles and emphasizes **reproducibility, analysis, and practical validation**.
+This project emphasizes **reproducibility, analysis, and practical validation**.
 
 ---
 
