@@ -5,8 +5,8 @@ This repository presents an **inference and evaluation pipeline for speech enhan
 
 The focus of this project is **not model novelty**, but **engineering correctness and evaluation reliability**, including:
 
-- Fixed-SNR testing for stable comparison
-- Alignment between training and inference pipelines
+- Fixed SNR (with fixed random seed for reproducible noise segment sampling
+- Inference preprocessing matches the training pipeline design (RMS normalization + STFT magnitude masking + noisy-phase ISTFT).
 - Use of **real-world recorded noises**
 - Objective metrics (PESQ / STOI) **and** Noise Reduction analysis
 - Diagnosis of metric–perceptual mismatch
@@ -156,6 +156,7 @@ Strong noise suppression can introduce:
 
 - Speech distortion
 - Over-suppression of low-energy speech components
+- In extreme low-SNR cases, over-suppression may attenuate low-energy phonemes, leading to perceived syllable dropouts.
 
 PESQ / STOI penalize distortion more than residual noise.
 
@@ -202,7 +203,7 @@ Models performing well on synthetic noises may fail on:
 ## 📌 Notes
 
 - This repository focuses on **inference and evaluation** using a pre-trained model
-- Model training is intentionally separated
+- Model training is intentionally separated. The provided pre-trained checkpoint is used to demonstrate the evaluation methodology; training code is omitted to keep the repo focused on inference/evaluation reliability.”
 - The code is designed for **clarity and reproducibility**, not production deployment
 
 ---
